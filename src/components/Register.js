@@ -1,7 +1,5 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import React, { useState, useCallback } from 'react';
-import { saveItem } from "../api/baseApi"
-import notify from "../utils/userMessage"
 import {
     Layout,
     Page,
@@ -119,37 +117,11 @@ function Register() {
     );
 }
 
-function ConnectAccount({ onAction }) {
-    return (
-        <AccountConnection
-            action={{ content: 'Connect', onAction }}
-            details="No account connected"
-            termsOfService={
-                <p>
-                    By clicking Connect, you are accepting Sample’s{' '}
-                    <Link url="https://polaris.shopify.com">Terms and Conditions</Link>,
-                    including a commission rate of 15% on sales.
-                </p>
-            }
-        />
-    );
-}
 
 function onChange(value) {
     console.log("Captcha value:", value);
 }
 
-function DisconnectAccount({ onAction }) {
-    return (
-        <AccountConnection
-            connected
-            action={{ content: 'Disconnect', onAction }}
-            accountName="Tom Ford"
-            title={<Link url="http://google.com">Tom Ford</Link>}
-            details="Account id: d587647ae4"
-        />
-    );
-}
 export default Register;
 // class App extends Component {
 //   state = {}

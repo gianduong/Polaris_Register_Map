@@ -4,7 +4,7 @@ import { BASE_URL } from './envConst.js';
 
 /**
  * Khởi tạo config mặc định
- * CreatedBy: NGDuong 07/06/2021
+ * CreatedBy: NGDuong 13/11/2021
 // */
 export default axios.create({
     baseURL: BASE_URL,
