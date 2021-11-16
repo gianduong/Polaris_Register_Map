@@ -45,20 +45,30 @@ body {
 .Polaris-Page {
 	margin: 100px auto !important;
 }
+// #region input
+.Polaris-InlineError {
+	position: absolute !important;
+	font-size: 13px !important;
+}
+.Polaris-InlineError__Icon {
+	margin-right: 1px !important;
+	width: 15px !important;
+}
+// #endregion
 // #endregion
 
 // #region list user
-.map{
+.map {
 	margin: 30px;
 	display: flex;
 	flex-wrap: wrap;
 	.list-user {
 		width: 30%;
-		.title{
+		.title {
 			font-size: 18px;
-			font-weight: 700;	
+			font-weight: 700;
 		}
-		.list-User-detail{
+		.list-User-detail {
 			display: flex;
 			flex-direction: column;
 			width: 100%;
@@ -84,16 +94,16 @@ body {
 			}
 		}
 	}
-	.map-detail{
+	.map-detail {
 		width: 70%;
 		height: 400px;
 		margin-top: 20px;
-		.map-container{
+		.map-container {
 			height: 400px;
 		}
 	}
 }
-.height{
+.height {
 	height: 400px;
 }
 // #endregion

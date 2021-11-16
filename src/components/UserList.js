@@ -7,6 +7,8 @@ import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMapEvents } from "r
 import L from 'leaflet';
 import personFilledMarker from '../assets/person.jpg';
 import { getPaging } from "../api/baseApi"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //#region Fomat icon
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -234,7 +236,8 @@ function UserList() {
         map.setView(userCenter, 12)
     }, [map])
     return (
-        <div className="map">        
+        <div className="map">  
+            <ToastContainer />      
             <div className="list-user">
                 <span className="title">Danh sách User</span>
                 <div className="list-User-detail">
