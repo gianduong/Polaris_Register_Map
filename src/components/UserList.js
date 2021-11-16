@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMapEvents } from "react-leaflet";
 import L from 'leaflet';
 import personFilledMarker from '../assets/person.jpg';
+import { getPaging } from "../api/baseApi"
 //#region Fomat icon
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -14,18 +15,19 @@ L.Icon.Default.mergeOptions({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
-//#endregion
-
 // Create marker icon according to the official leaflet documentation
 const personMarker = L.icon({
     iconUrl: personFilledMarker,
     iconSize: [40, 40],
     iconAnchor: [20, 40],
 });
+//#endregion
+
 const center = [51.505, -0.09]
 const zoom = 13
 const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
+//#region show center
 function DisplayPosition({ map }) {
     const [position, setPosition] = useState(map.getCenter())
 
@@ -51,6 +53,7 @@ function DisplayPosition({ map }) {
         </p>
     )
 }
+//#endregion
 
 function LocationMarker() {
     const [position, setPosition] = useState(null)
@@ -71,7 +74,6 @@ function LocationMarker() {
                 Bạn ở đây
             </Tooltip>
         </Marker>
-
     )
 }
 
@@ -87,7 +89,9 @@ function Items({ currentItems }) {
         </>
     );
 }
+
 function UserList() {
+    
     const [map, setMap] = useState(null)
     let data = [
         {
@@ -181,10 +185,20 @@ function UserList() {
         const newOffset = event.selected * itemsPerPage % items.length;
         console.log(`User requested page number ${event.selected}, which is offset ${newOffset}`);
         setItemOffset(newOffset);
-    };
+    }
     //#endregion
 
+    const [users, setUsers] = useState(null)
 
+    function HandleGetUser(){
+        const pageInt = 1;
+        const pageSize = 10;
+        getPaging(pageInt,pageSize).then((res) => {
+            setUsers(res.data)
+            console.log(users)
+        })
+    };
+    HandleGetUser()
     const displayMap = useMemo(
         () => (
             <MapContainer
@@ -200,7 +214,7 @@ function UserList() {
                     {data &&
                         data.map((item) => (
                             <Marker position={[item.lat, item.lng]} icon={personMarker}>
-                                <Tooltip  offset={[0, 20]} opacity={1} permanent>
+                                <Tooltip offset={[0, 20]} opacity={1} permanent>
                                     <>
                                         <div>Họ và tên: {item.name}</div>
                                         <div>Tuổi: {item.age}</div>
@@ -217,10 +231,10 @@ function UserList() {
     )
     const onClick = useCallback((user) => {
         const userCenter = [user.lat, user.lng];
-        map.setView(userCenter, 6)
+        map.setView(userCenter, 12)
     }, [map])
     return (
-        <div className="map">
+        <div className="map">        
             <div className="list-user">
                 <span className="title">Danh sách User</span>
                 <div className="list-User-detail">

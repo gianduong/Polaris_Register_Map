@@ -8,8 +8,9 @@ import {
     Button,
     FormLayout,
     TextField,
-    AccountConnection,Toast
+    AccountConnection, Toast
 } from '@shopify/polaris';
+import { saveItem } from "../api/baseApi"
 function Register() {
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
@@ -17,7 +18,6 @@ function Register() {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
-    const [isLogin, setLogin] = useState(false);
 
     const handleFirstChange = useCallback((value) => setFirst(value), []);
     const handleLastChange = useCallback((value) => setLast(value), []);
@@ -36,20 +36,14 @@ function Register() {
     }
 
     const Register = (u) => {
-        setLogin(true);
-        if(isLogin){
-            window.location.href = '/UserList';
-        }
-        if(!isLogin){
-            return(<Toast content="Tên đăng nhập hoặc mật khẩu không chính xác"/>);
-        }
-        // saveItem(user)
-        //   .then((res) => {
-        //     this.geojson = res.data;
-        //   })
-        //   .catch(() => {
-        //     this.notifyError(notify.Notify_Error());
-        //   });
+        saveItem(u)
+            .then((res) => {
+                if (res.status == "200") window.location.href = '/UserList';
+                else return (<Toast content={res.userMsg} />);
+            })
+            .catch((res) => {
+                return <Toast content={res.userMsg} />
+            });
     }
     return (
         <Page>
