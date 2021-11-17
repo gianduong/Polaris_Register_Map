@@ -9,6 +9,7 @@ import personFilledMarker from '../assets/person.jpg';
 import { getPaging } from "../api/baseApi"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import notify from "../utils/userMessage"
 //#region Fomat icon
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -27,7 +28,6 @@ const personMarker = L.icon({
 
 const center = [51.505, -0.09]
 const zoom = 13
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 //#region show center
 function DisplayPosition({ map }) {
@@ -79,23 +79,11 @@ function LocationMarker() {
     )
 }
 
-function Items({ currentItems }) {
-    return (
-        <>
-            {currentItems &&
-                currentItems.map((item) => (
-                    <div>
-                        <h3>Item #{item}</h3>
-                    </div>
-                ))}
-        </>
-    );
-}
 
 function UserList() {
-    
+
     const [map, setMap] = useState(null)
-    let data = [
+    var data = [
         {
             name: 'Person1',
             age: 30,
@@ -167,7 +155,7 @@ function UserList() {
         }
     ]
     //#region pagination
-    const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [itemsPerPage] = useState(5);
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
     // Here we use item offsets; we could also use page offsets
@@ -177,30 +165,28 @@ function UserList() {
     useEffect(() => {
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-        setCurrentItems(items.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(items.length / itemsPerPage));
+        setCurrentItems(data.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(data.length / itemsPerPage));
     }, [itemOffset, itemsPerPage]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = event.selected * itemsPerPage % items.length;
+        const newOffset = event.selected * itemsPerPage % data.length;
         console.log(`User requested page number ${event.selected}, which is offset ${newOffset}`);
         setItemOffset(newOffset);
     }
     //#endregion
 
-    const [users, setUsers] = useState(null)
+    var users = null;
 
-    function HandleGetUser(){
+    function HandleGetUser() {
         const pageInt = 1;
         const pageSize = 10;
-        getPaging(pageInt,pageSize).then((res) => {
-            setUsers(res.data)
+        getPaging(pageInt, pageSize).then((res) => {
+            users = res.data
             console.log(users)
         })
     };
-    HandleGetUser()
     const displayMap = useMemo(
         () => (
             <MapContainer
@@ -236,25 +222,36 @@ function UserList() {
         map.setView(userCenter, 12)
     }, [map])
     return (
-        <div className="map">  
-            <ToastContainer />      
+        <div className="map">
+            {users == null && HandleGetUser()}
+            <ToastContainer />
             <div className="list-user">
                 <span className="title">Danh sách User</span>
-                <div className="list-User-detail">
+                {/* <div className="list-User-detail">
                     {data.map((person, index) => (
                         <div className="list-item" onClick={() => onClick(person)}>
                             <Avatar customer name="Farrah" />
                             <span key={index} >{person.name}</span>
                         </div>
                     ))}
-                </div>
-                <Items currentItems={currentItems} />
+                </div> */}
+                
                 <div className="list-User-detail">
-                    <div className="list-item">
+                    {currentItems &&
+                        currentItems.map((person) => (
+                            <div className="list-item" onClick={() => onClick(person)}>
+                            <Avatar customer name="Farrah" />
+                            <span>{person.name}</span>
+                        </div>
+                        ))}
+                </div>
+                <div className="pagination">
+                    <span>total: {pageCount}</span>
+                    <div className="pagination-item">
                         <ReactPaginate
                             nextLabel=">"
                             onPageChange={handlePageClick}
-                            pageRangeDisplayed={5}
+                            pageRangeDisplayed={2}
                             pageCount={pageCount}
                             previousLabel="<"
                             pageClassName="page-item"
@@ -274,7 +271,6 @@ function UserList() {
                 </div>
             </div>
             <div className="map-detail">
-
                 {displayMap}
             </div >
         </div >

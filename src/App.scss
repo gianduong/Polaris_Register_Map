@@ -73,7 +73,7 @@ body {
 			flex-direction: column;
 			width: 100%;
 			padding-right: 20px;
-			max-height: 340px;
+			height: 320px;
 			overflow-y: scroll;
 			.list-item {
 				cursor: pointer;
@@ -93,6 +93,16 @@ body {
 				}
 			}
 		}
+		.pagination{
+			display: flex;
+			justify-content: space-between;		
+			span{
+				margin: auto 0;
+			}
+			.pagination-item{
+				margin-right: 20px;
+			}
+		}
 	}
 	.map-detail {
 		width: 70%;
@@ -103,6 +113,7 @@ body {
 		}
 	}
 }
+
 .height {
 	height: 400px;
 }
